@@ -4,6 +4,7 @@ import Users, { userProps } from '../controllers/users';
 const router = Router();
 
 router.get('/', async (_req: Request, res: Response<userProps[]>) => {
+    console.log("called")
     try {
         const userList: userProps[] = await Users.get();
         return res.status(200).json(userList);

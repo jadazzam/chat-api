@@ -1,4 +1,4 @@
-// src/controllers/users.ts
+import {client} from "../db";
 export type userProps = {
     id: number;
     name: string;
@@ -13,6 +13,8 @@ class Users {
             email: 'alice@gmail.com',
             password: 'password',
         };
+        const resp = await client.query('SELECT * FROM users');
+        console.log("resp in controller =>", resp)
         return Promise.resolve([user]); // return an array
     }
 }
