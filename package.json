@@ -1,0 +1,35 @@
+{
+  "name": "chat-api",
+  "version": "1.0.0",
+  "description": "Chat API",
+  "main": "src/app.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "lint": "eslint src/js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "chat-api"
+  },
+  "keywords": [
+    "chat",
+    "typescript",
+    "socket.io"
+  ],
+  "author": "Jad Azzam",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/node": "^22.15.17",
+    "eslint": "^9.26.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "express": "^4.21.2"
+  }
+}
