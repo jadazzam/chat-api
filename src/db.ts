@@ -1,7 +1,7 @@
 import { Pool, PoolConfig, QueryResult } from 'pg';
 
 class PoolDB {
-    private config: Readonly<PoolConfig>;
+    private readonly config: PoolConfig;
     private pool: Pool | null = null;
 
     constructor() {
@@ -18,7 +18,7 @@ class PoolDB {
         if (!this.pool) {
             try {
                 this.pool = new Pool(this.config);
-                console.log("Connected to PostgreSQL pool");
+                console.log("Connected to PostgresSQL pool");
             } catch (e) {
                 console.error("Failed to initialize pool:", e);
                 throw e;
