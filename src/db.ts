@@ -1,4 +1,4 @@
-import {Pool, PoolConfig} from 'pg';
+import {Pool, PoolConfig, QueryResult} from 'pg';
 
 class PoolDB {
     private config: Readonly<PoolConfig>;
@@ -24,7 +24,7 @@ class PoolDB {
         return this.pool
     }
 
-     async query(req: string) {
+     async query(req: string): Promise<QueryResult | undefined> {
         let pool = this.pool;
          if (!this.pool) {
               pool = this.init()
