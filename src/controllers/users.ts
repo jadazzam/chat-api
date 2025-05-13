@@ -1,21 +1,16 @@
-import {client} from "../db";
-export type userProps = {
-    id: number;
-    name: string;
-    email: string;
-    password: string;
-};
+import UsersModel, {UserProps} from '../models/users'
+
 class Users {
-    static async get(): Promise<userProps[]> {
-        const user = {
-            id: 1,
-            name: 'Alice',
-            email: 'alice@gmail.com',
-            password: 'password',
-        };
-        const resp = await client.query('SELECT * FROM users');
-        console.log("resp in controller =>", resp)
-        return Promise.resolve([user]); // return an array
+    private usersModel = new UsersModel()
+
+    async findAll(): Promise<UserProps[] | undefined> {
+        try {
+            const res = await this.usersModel.findAll()
+            return res
+        } catch(err) {
+            console.log("Error Users Ctrl ",err)
+            throw err
+        }
     }
 }
 
