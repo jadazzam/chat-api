@@ -1,17 +1,31 @@
-import { Router, Request, Response } from 'express';
+import {Request, Response, Router} from 'express';
 import Users from '../controllers/users';
-import {UserProps} from '../models/users';
+import {UserGetType} from "../types/users";
 
 const router = Router();
 
-router.get('/', async (_req: Request, res: Response<UserProps[]>) => {
+router.get('/', async (_req: Request, res: Response<UserGetType[] | Partial<Error>>) => {
     try {
         const ctrl = new Users();
         const response = await ctrl.findAll();
         return res.status(200).json(response);
     } catch (error) {
-        return res.status(500).json([]);
+        return res.status(500).json({message: "get users error"});
     }
 });
 
+router.post('/', async (_req: Request, res: Response<UserGetType | Partial<Error>>) => {
+    try {
+        const ctrl = new Users();
+        const payload = {
+            name: _req.body.name,
+            email: _req.body.email,
+            password: _req.body.password,
+        }
+        const response: UserGetType | undefined = await ctrl.create(payload);
+        return res.status(200).json(response)
+    } catch (error) {
+        return res.status(500).json({message: "create user error"});
+    }
+})
 export default router;
