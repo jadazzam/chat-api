@@ -10,7 +10,7 @@ class Users {
             const response: UserGetType[] = await this.usersModel.findAll()
             return response
         } catch (err) {
-            console.log("Error Users Ctrl ", err)
+            console.error("Error Users Ctrl ", err)
             throw err
         }
     }
