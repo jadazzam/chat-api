@@ -8,10 +8,18 @@ class Users {
 
     async findAll(): Promise<UserGetType[]> {
         try {
-            const response: UserGetType[] = await this.usersModel.findAll()
-            return response
+            return await this.usersModel.findAll()
         } catch (err) {
-            console.error("Error Users Ctrl ", err)
+            console.error("Error users ctrl findAll ", err)
+            throw err
+        }
+    }
+
+    async findById(id: string): Promise<UserGetType | Partial<Error>> {
+        try {
+            return await this.usersModel.findById(id)
+        } catch (err) {
+            console.log("Error users ctrl findById", err)
             throw err
         }
     }

@@ -19,6 +19,16 @@ class Users {
         }
     }
 
+    async findById(id: string): Promise<UserGetType> {
+        try {
+            const res: QueryResult = await this.pool.query('SELECT id, name, email FROM users WHERE id = $1', [id]);
+            return res.rows[0] as UserGetType;
+        } catch (e) {
+            console.error("Error in Users Model findAll:", e);
+            throw e;
+        }
+    }
+
     async create(payload: UserPostType): Promise<UserGetType> {
         try {
             const query = `

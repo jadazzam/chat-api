@@ -14,6 +14,17 @@ router.get('/', async (_req: Request, res: Response<UserGetType[] | Partial<Erro
     }
 });
 
+router.get('/:id', async (_req: Request, res: Response<UserGetType[] | Partial<Error>>) => {
+    try {
+        const {id} = _req.params
+        const ctrl = new Users();
+        const response = await ctrl.findById(id);
+        return res.status(200).json(response);
+    } catch (error) {
+        return res.status(500).json({message: "get users error"});
+    }
+});
+
 router.post('/', async (_req: Request, res: Response<UserGetType | Partial<Error>>) => {
     try {
         const ctrl = new Users();
@@ -22,7 +33,7 @@ router.post('/', async (_req: Request, res: Response<UserGetType | Partial<Error
             email: _req.body.email,
             password: _req.body.password,
         }
-        const response: UserGetType | undefined = await ctrl.create(payload);
+        const response: UserGetType | Partial<Error> = await ctrl.create(payload);
         return res.status(200).json(response)
     } catch (error) {
         return res.status(500).json({message: "create user error"});

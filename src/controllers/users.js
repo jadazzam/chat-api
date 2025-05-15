@@ -18,9 +18,7 @@ class Users {
     async create(payload) {
         try {
             const { password } = payload;
-            console.log("password in ctrl =>", password);
             const hashedPassword = hashPassword(password);
-            console.log("hashedPassword", hashedPassword);
             const response = await this.usersModel.create(payload);
             return response;
         }
