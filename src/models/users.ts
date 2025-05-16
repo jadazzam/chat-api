@@ -11,7 +11,7 @@ class Users {
 
     async findAll(): Promise<UserGetType[]> {
         try {
-            const res: QueryResult = await this.pool.query('SELECT id, name, email FROM users');
+            const res: QueryResult = await this.pool.query('SELECT id, name, email, created_at FROM users');
             return res.rows as UserGetType[];
         } catch (e) {
             console.error("Error in Users Model findAll:", e);
@@ -21,7 +21,7 @@ class Users {
 
     async findById(id: string): Promise<UserGetType> {
         try {
-            const res: QueryResult = await this.pool.query('SELECT id, name, email FROM users WHERE id = $1', [id]);
+            const res: QueryResult = await this.pool.query('SELECT id, name, email, created_at FROM users WHERE id = $1', [id]);
             return res.rows[0] as UserGetType;
         } catch (e) {
             console.error("Error in Users Model findAll:", e);
@@ -33,7 +33,7 @@ class Users {
         try {
             const query = `
                 INSERT INTO users (name, email, password)
-                VALUES ($1, $2, $3) RETURNING id, name, email;
+                VALUES ($1, $2, $3) RETURNING id, name, email, created_at;
             `;
             const values = [payload.name, payload.email, payload.password];
             const res: QueryResult = await this.pool.query(query, values);

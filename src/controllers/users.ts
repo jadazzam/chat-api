@@ -8,7 +8,9 @@ class Users {
 
     async findAll(): Promise<UserGetType[]> {
         try {
-            return await this.usersModel.findAll()
+            const response = await this.usersModel.findAll()
+            if (!response) throw new Error(`Users not found`)
+            return response
         } catch (err) {
             console.error("Error users ctrl findAll ", err)
             throw err
@@ -17,9 +19,11 @@ class Users {
 
     async findById(id: string): Promise<UserGetType | Partial<Error>> {
         try {
-            return await this.usersModel.findById(id)
+            const response = await this.usersModel.findById(id)
+            if (!response) throw new Error(`User with id ${id} not found`)
+            return response
         } catch (err) {
-            console.log("Error users ctrl findById", err)
+            console.error("Error users ctrl findById", err)
             throw err
         }
     }
@@ -32,7 +36,7 @@ class Users {
             else Error("create user error : password hash")
             return await this.usersModel.create(payload)
         } catch (err) {
-            console.log("Error Users Ctrl ", err)
+            console.error("Error Users Ctrl ", err)
             throw err
         }
     }
