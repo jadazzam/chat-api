@@ -1,4 +1,4 @@
-import { Pool, PoolConfig, QueryResult } from 'pg';
+import {Pool, PoolConfig, QueryResult} from 'pg';
 
 class PoolDB {
     private readonly config: PoolConfig;

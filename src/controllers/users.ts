@@ -1,5 +1,6 @@
 import UsersModel from '../models/users'
 import {UserGetType, UserPostType} from "../types/users";
+import {hashPassword} from "../common/bcrypt";
 
 // find findById create update delete count exists
 class Users {
@@ -7,19 +8,35 @@ class Users {
 
     async findAll(): Promise<UserGetType[]> {
         try {
-            const response: UserGetType[] = await this.usersModel.findAll()
+            const response = await this.usersModel.findAll()
+            if (!response) throw new Error(`Users not found`)
             return response
         } catch (err) {
-            console.error("Error Users Ctrl ", err)
+            console.error("Error users ctrl findAll ", err)
             throw err
         }
     }
 
-    async create(payload: UserPostType): Promise<UserGetType | undefined> {
+    async findById(id: string): Promise<UserGetType | Partial<Error>> {
         try {
+            const response = await this.usersModel.findById(id)
+            if (!response) throw new Error(`User with id ${id} not found`)
+            return response
+        } catch (err) {
+            console.error("Error users ctrl findById", err)
+            throw err
+        }
+    }
+
+    async create(payload: UserPostType): Promise<UserGetType | Partial<Error>> {
+        try {
+            const {password} = payload
+            const hashedPassword = hashPassword(password)
+            if (hashedPassword) payload.password = hashedPassword
+            else Error("create user error : password hash")
             return await this.usersModel.create(payload)
         } catch (err) {
-            console.log("Error Users Ctrl ", err)
+            console.error("Error Users Ctrl ", err)
             throw err
         }
     }
