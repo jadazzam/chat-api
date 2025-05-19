@@ -27,9 +27,9 @@ class UsersController {
         }
     }
 
-    async findByParam(param: string, value: unknown): Promise<UserGetType | null> {
+    async findByParam(param: string, value: unknown, complete = false): Promise<UserGetType | null> {
         try {
-            const response = await this.usersModel.findByParam(param, value)
+            const response = await this.usersModel.findByParam(param, value, complete)
             if (!response) return null
             return response
         } catch (err) {
