@@ -2,8 +2,7 @@ import UsersModel from '../models/users'
 import {UserGetType, UserPostType} from "../types/users";
 import {hashPassword} from "../common/bcrypt";
 
-// find findById create update delete count exists
-class Users {
+class UsersController {
     private usersModel = new UsersModel()
 
     async findAll(): Promise<UserGetType[]> {
@@ -17,7 +16,7 @@ class Users {
         }
     }
 
-    async findById(id: string): Promise<UserGetType | Partial<Error>> {
+    async findById(id: string): Promise<UserGetType> {
         try {
             const response = await this.usersModel.findById(id)
             if (!response) throw new Error(`User with id ${id} not found`)
@@ -28,12 +27,23 @@ class Users {
         }
     }
 
-    async create(payload: UserPostType): Promise<UserGetType | Partial<Error>> {
+    async findByParam(param: string, value: unknown): Promise<UserGetType> {
+        try {
+            const response = await this.usersModel.findByParam(param, value)
+            if (!response) throw new Error(`User with param ${param}: ${value} not found`)
+            return response
+        } catch (err) {
+            console.error("Error users ctrl findById", err)
+            throw err
+        }
+    }
+
+    async create(payload: UserPostType): Promise<UserGetType> {
         try {
             const {password} = payload
             const hashedPassword = hashPassword(password)
             if (hashedPassword) payload.password = hashedPassword
-            else Error("create user error : password hash")
+            else throw new Error("create user error : password hash")
             return await this.usersModel.create(payload)
         } catch (err) {
             console.error("Error Users Ctrl ", err)
@@ -44,4 +54,4 @@ class Users {
 
 }
 
-export default Users;
+export default UsersController;

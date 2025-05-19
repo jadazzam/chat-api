@@ -1,0 +1,46 @@
+import {NextFunction, Request, Response} from "express";
+import jwt from "jsonwebtoken";
+
+class AuthMiddleware {
+
+    static checkJwtSecret(): boolean {
+        console.log("PROCESS", process.env.JWT_SECRET);
+        return !!process.env.JWT_SECRET
+    }
+
+
+    static verifyToken(req: Request, res: Response, next: NextFunction): void {
+        const authHeader = req.headers.authorization;
+        try {
+            if (!this.checkJwtSecret()) res.status(500).json({message: "Error JWT token"})
+            if (!authHeader || !authHeader.startsWith('Bearer ')) {
+                res.status(500).json({message: "Error: Not authorized: No token provided"})
+            }
+            const token = authHeader?.split(' ')[1]
+            const decoded = token && jwt.verify(token, process.env.JWT_SECRET || '');
+            if (decoded) (req as any).user = decoded;
+            else res.status(500).json({message: "Error: Not authorized: invalid token provided"})
+            next()
+        } catch (err) {
+            console.error("Error JWT verification failed:", err);
+            res.status(403).json({message: 'Invalid token', error: err});
+        }
+    }
+
+    static async createToken(payload: { email: string; password: string }): Promise<string> {
+        const {email, password} = payload
+        if (!this.checkJwtSecret()) throw new Error('Error signing in');
+        try {
+            return jwt.sign({
+                email,
+                password
+            }, process.env.JWT_SECRET || '', {expiresIn: '7d'})
+        } catch (err) {
+            console.error("Error JWT create token", err)
+            throw err
+        }
+
+    }
+}
+
+export default AuthMiddleware;
