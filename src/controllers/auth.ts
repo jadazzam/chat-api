@@ -17,9 +17,9 @@ class AuthController {
                 throw new Error(`No user sign in info provided. Missing fields : ${field}`)
             }
             const {email, password} = payload
-            const user = await this.usersCtrl.findByParam("email", email)
+            const user: UserGetType = await this.usersCtrl.findByParam("email", email)
             if (!user) throw new Error("User not found")
-            const token = await AuthMiddleware.createToken({email, password})
+            const token: string = await AuthMiddleware.createToken({email, password})
             if (!token) throw new Error('Error creating token')
             return {user, token}
         } catch (err) {
