@@ -27,10 +27,10 @@ class UsersController {
         }
     }
 
-    async findByParam(param: string, value: unknown): Promise<UserGetType> {
+    async findByParam(param: string, value: unknown): Promise<UserGetType | null> {
         try {
             const response = await this.usersModel.findByParam(param, value)
-            if (!response) throw new Error(`User with param ${param}: ${value} not found`)
+            if (!response) return null
             return response
         } catch (err) {
             console.error("Error users ctrl findById", err)

@@ -4,7 +4,6 @@ import jwt from "jsonwebtoken";
 class AuthMiddleware {
 
     static checkJwtSecret(): boolean {
-        console.log("PROCESS", process.env.JWT_SECRET);
         return !!process.env.JWT_SECRET
     }
 
