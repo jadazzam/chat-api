@@ -24,7 +24,7 @@ class AuthController {
             const isIdentical = await comparePasswords(payload.password, user.password ?? '')
             if (isIdentical) delete user.password
             else throw new Error('Error signin password is incorrect')
-            const token: string = await AuthMiddleware.createToken({email, password})
+            const token: string = await AuthMiddleware.createToken({email, name: user.name, id: user.id})
             if (!token) throw new Error('Error creating token')
             return {user, token}
         } catch (err) {
@@ -45,11 +45,11 @@ class AuthController {
                 if (!payload.name) field += ' name'
                 throw new Error(`No user sign up info provided. Missing fields : ${field}`)
             }
-            const {email, password} = payload
+            const {email, name} = payload
             let user: UserGetType | null = await this.usersCtrl.findByParam("email", email)
             if (user) throw new Error(`User ${email} already exists`)
             user = await this.usersCtrl.create(payload)
-            const token: string = await AuthMiddleware.createToken({email, password})
+            const token: string = await AuthMiddleware.createToken({email, name, id: user.id})
             if (!token) throw new Error('Error creating token')
             return {user, token}
         } catch (err) {

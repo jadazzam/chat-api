@@ -26,13 +26,14 @@ class AuthMiddleware {
         }
     }
 
-    static async createToken(payload: { email: string; password: string }): Promise<string> {
-        const {email, password} = payload
+    static async createToken(payload: { email: string; name: string, id: string }): Promise<string> {
+        const {email, name, id} = payload
         if (!this.checkJwtSecret()) throw new Error('Error signing in');
         try {
             return jwt.sign({
                 email,
-                password
+                name,
+                id
             }, process.env.JWT_SECRET || '', {expiresIn: '7d'})
         } catch (err) {
             console.error("Error JWT create token", err)
