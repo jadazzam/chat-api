@@ -10,11 +10,7 @@ class MessagesModel {
     }
 
     async findByParam(param: string, value: string): Promise<MessageType[]> {
-        const allowedParams = ["id", "user_id", "room_id"];
         try {
-            if (!allowedParams.includes(param)) {
-                throw new Error(`Invalid parameter: ${param}`)
-            }
             let query = `SELECT id, content, user_id, room_id
                          FROM messages
                          WHERE ${param} = $1`

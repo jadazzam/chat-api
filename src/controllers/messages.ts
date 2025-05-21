@@ -11,11 +11,17 @@ class MessagesController {
 
     }
 
-    async findByUser(): Promise<MessageType[]> {
+    async findByParam(param: "id" | "user_id" | "room_id", id?: string): Promise<MessageType[]> {
         try {
-            return await this.messagesModel.findByParam("user_id", this.user.id)
+            if (param === "user_id") id = this.user.id;
+            if (!id) throw new Error(`Error Messages Controller: missing param`)
+            const allowedParams = ["id", "user_id", "room_id"];
+            if (!allowedParams.includes(param)) {
+                throw new Error(`Invalid parameter: ${param}`)
+            }
+            return await this.messagesModel.findByParam(param, id)
         } catch (err) {
-            console.log(err)
+            console.error(err)
             throw err
         }
     }

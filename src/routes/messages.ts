@@ -19,7 +19,7 @@ router.get('/', async (req: Request, res: Response) => {
             name: authUser.name
         };
         const ctrl = new MessagesController({user: user});
-        const messages: MessageType[] = await ctrl.findByUser();
+        const messages: MessageType[] = await ctrl.findByParam("user_id");
         return res.status(200).json(messages);
     } catch (e) {
         console.error("Error Route GET messages", e);
