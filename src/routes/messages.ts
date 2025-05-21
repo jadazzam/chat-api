@@ -46,4 +46,25 @@ router.post('/', async (req: Request, res: Response) => {
         res.status(500).json({message: (e as Error).message});
     }
 })
+
+router.put('/:id', async (req: Request, res: Response) => {
+    try {
+        const {id} = req.params
+        const payload = req.body
+        const authUser = (req as MessagesRequestProps).user;
+        const user = {
+            id: authUser.id,
+            email: authUser.email,
+            created_at: authUser.created_at,
+            name: authUser.name,
+        }
+        const ctrl = new MessagesController({user: user});
+        const message: MessageType = await ctrl.update(id, payload);
+        res.status(200).json(message);
+    } catch (e) {
+        console.error("Error Route POST message", e);
+        res.status(500).json({message: (e as Error).message});
+    }
+})
+
 export default router

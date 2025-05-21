@@ -30,7 +30,25 @@ class MessagesModel {
             const response = await this.pool.query(query, values);
             return response.rows[0] as MessageType;
         } catch (e) {
-            console.error("Error in message model create", e)
+            console.error("Error message models create", e)
+            throw e
+        }
+    }
+
+    async update(id: string, payload: Pick<MessageType, "content">): Promise<MessageType> {
+        let query = ""
+        let values: string[] = []
+        if (payload.content) {
+            query = `UPDATE messages
+                     SET content = $1
+                     WHERE id = $2 RETURNING *`
+            values = [payload.content, id]
+        }
+        try {
+            const response = await this.pool.query(query, values)
+            return response.rows[0] as MessageType;
+        } catch (e) {
+            console.error('Error Messages model update', e);
             throw e
         }
     }
