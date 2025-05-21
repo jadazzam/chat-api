@@ -9,7 +9,7 @@ class MessagesModel {
         this.pool = new PoolDB();
     }
 
-    async findByParam(param: string, value: string) {
+    async findByParam(param: string, value: string): Promise<MessageType[]> {
         const allowedParams = ["id", "user_id", "room_id"];
         try {
             if (!allowedParams.includes(param)) {
@@ -19,9 +19,22 @@ class MessagesModel {
                          FROM messages
                          WHERE ${param} = $1`
             const res: QueryResult = await this.pool.query(query, [value]);
-            return res.rows[0] as MessageType;
+            return res.rows as MessageType[];
         } catch (e) {
             console.error('Error in Messages model findByParam', e);
+            throw e
+        }
+    }
+
+    async create(payload: Pick<MessageType, "content" | "user_id" | "room_id">): Promise<MessageType> {
+        try {
+            const query = `INSERT INTO messages (content, user_id, room_id)
+                           VALUES ($1, $2, $3) RETURNING *`
+            const values = [payload.content, payload.user_id, payload.room_id]
+            const response = await this.pool.query(query, values);
+            return response.rows[0] as MessageType;
+        } catch (e) {
+            console.error("Error in message model create", e)
             throw e
         }
     }
