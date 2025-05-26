@@ -21,6 +21,18 @@ class RoomsMembersController {
         }
     }
 
+    async create(params: { roomId: string; userId: string }): Promise<RoomsMembersType> {
+        try {
+            const {roomId, userId} = params;
+            if (!roomId) throw new Error(`roomId param is required`);
+            if (!userId) throw new Error(`userId param is required`);
+            return await this.roomsMembersModel.create({roomId, userId});
+        } catch (e) {
+            console.error("Error RoomsMembers Controller create", e)
+            throw e
+        }
+    }
+
     async update(room_id: string, user_id: string, changes: {
         active: string
     }): Promise<RoomsMembersType> {

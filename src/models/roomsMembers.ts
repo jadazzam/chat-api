@@ -21,6 +21,19 @@ class RoomsMembersModel {
         }
     }
 
+    async create(params: { userId: string, roomId: string }) {
+        try {
+            const query = `INSERT INTO rooms_members (room_id, user_id)
+                           VALUES ($1, $2) RETURNING *`;
+            const {userId, roomId} = params
+            const res = await this.pool.query(query, [roomId, userId])
+            return res.rows[0] as RoomsMembersType;
+        } catch (e) {
+            console.error("Error RoomsMembersModel create", e);
+            throw e
+        }
+    }
+
     async update(room_id: string, user_id: string, changes: { active: boolean }) {
         try {
             const query = `

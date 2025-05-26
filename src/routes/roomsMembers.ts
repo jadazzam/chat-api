@@ -21,8 +21,25 @@ router.get('/', async (req: Request, res: Response) => {
     }
 })
 
-interface RoomsMembersPutRequest extends RoomsMembersRequest {
+interface RoomsMembersPostRequest extends RoomsMembersRequest {
     params: { roomId: string; userId: string };
+}
+
+router.post('/', async (req: Request, res: Response) => {
+    try {
+        const {user} = req as RoomsMembersPostRequest
+        const {roomId, userId} = req.body
+        const sanitized = Object.assign({}, {id: user.id, email: user.email, name: user.name})
+        const ctrl = new RoomsMembersController({user: sanitized});
+        const response = await ctrl.create({roomId, userId})
+        return res.status(200).json(response)
+    } catch (e) {
+        console.error('Error route POST rooms-members roomId and userId', e)
+        res.status(500).json({error: (e as Error).message})
+    }
+})
+
+interface RoomsMembersPutRequest extends RoomsMembersPostRequest {
     query: { active: string }
 }
 
