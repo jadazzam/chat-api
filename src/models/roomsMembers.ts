@@ -8,7 +8,7 @@ class RoomsMembersModel {
         this.pool = new PoolDB();
     }
 
-    async findByParam(param: string, value: unknown) {
+    async findByParam(param: "user_id" | "room_id", value: unknown) {
         try {
             const query = `SELECT *
                            FROM rooms_members

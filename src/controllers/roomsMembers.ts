@@ -1,5 +1,6 @@
 import {UserGetType} from "../types/users";
 import RoomsMembersModel from "../models/roomsMembers";
+import {RoomsMembersType} from "../types/roomsMembers";
 
 class RoomsMembersController {
     private user: Pick<UserGetType, "id" | "name" | "email">;
@@ -9,9 +10,11 @@ class RoomsMembersController {
         this.user = props.user;
     }
 
-    async findByParam() {
+    async findByParam(param: "user_id" | "room_id" = "user_id", value: unknown = this.user.id): Promise<RoomsMembersType[]> {
         try {
-            return await this.roomsMembersModel.findByParam("user_id", this.user.id)
+            const allowedParams = ["user_id", "room_id"]
+            if (!allowedParams.includes(param)) throw new Error(`Error RoomMembersController findByParam ${param} not allowed`);
+            return await this.roomsMembersModel.findByParam(param, value)
         } catch (e) {
             console.error("Error Controller Rooms Members find", e)
             throw e
