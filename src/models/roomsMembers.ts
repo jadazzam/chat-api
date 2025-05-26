@@ -20,6 +20,27 @@ class RoomsMembersModel {
             throw e
         }
     }
+
+    async update(room_id: string, user_id: string, changes: { active: boolean }) {
+        try {
+            const query = `
+                UPDATE rooms_members
+                SET active  = $1,
+                    left_at = $2
+                WHERE room_id = $3
+                  AND user_id = $4 RETURNING *;
+            `;
+
+            const now = new Date();
+            const res = await this.pool.query(query, [changes.active, now, room_id, user_id]);
+            return res.rows[0] as RoomsMembersType;
+        } catch (e) {
+            console.error("Error RoomsMembersModel findByParam", e);
+            throw e
+        }
+    }
+
+
 }
 
 export default RoomsMembersModel
