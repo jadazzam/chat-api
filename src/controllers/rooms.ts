@@ -1,5 +1,6 @@
 import {UserRequestType} from "../types/users";
 import RoomsModel from "../models/rooms";
+import {RoomsType} from "../types/rooms";
 
 class RoomsController {
     private roomsModel = new RoomsModel()
@@ -14,6 +15,19 @@ class RoomsController {
             return await this.roomsModel.findAll();
         } catch (e) {
             console.error("Error RoomsController findAll", e)
+            throw e
+        }
+    }
+
+    async findByParam(param: "id" | "owner_id", value: string): Promise<RoomsType[]> {
+        try {
+            const allowedParams = ["id", "owner_id"]
+            if (!allowedParams.includes(param)) throw new Error(`${param} not allowed`)
+            if (!value) throw new Error(`value for ${param} required`)
+            const response = await this.roomsModel.findByParam(param, value)
+            return response
+        } catch (e) {
+            console.error("Error RoomsController findByParam", e)
             throw e
         }
     }

@@ -16,6 +16,23 @@ class RoomsModel {
         }
     }
 
+    async findByParam(param: "owner_id" | "id", value: string): Promise<RoomsType[]> {
+        try {
+            let query = ``
+            if (param === "owner_id") {
+                query = `SELECT *
+                         FROM rooms
+                         WHERE owner_id = $1`
+            } else if (param === "id") query = `SELECT *
+                                                FROM rooms
+                                                WHERE id = $1`
+            const response = await this.pool.query(query, [value])
+            return response.rows as RoomsType[]
+        } catch (e) {
+            console.error("Error RoomsModel findByParam", e)
+            throw e
+        }
+    }
 
     async create(payload: { name: string, ownerId: string }): Promise<RoomsType> {
         try {

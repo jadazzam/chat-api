@@ -23,6 +23,18 @@ router.get("/", async (req: Request, res: Response) => {
     }
 })
 
+router.get("/mine", async (req: Request, res: Response) => {
+    try {
+        const user: UserRequestType = (req as RoomsPostRequestType).user
+        const ctrl = new RoomsController(user)
+        const rooms = await ctrl.findByParam("owner_id", user.id)
+        res.status(200).json(rooms)
+    } catch (e) {
+        console.error("Error Rooms POST", e)
+        res.status(500).json(null)
+    }
+})
+
 
 router.post("/", async (req: Request, res: Response) => {
     try {
