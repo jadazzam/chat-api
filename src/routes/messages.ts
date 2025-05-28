@@ -1,21 +1,16 @@
 import {Request, Response, Router} from "express";
 import MessagesController from "../controllers/messages";
-import {UserGetType} from "../types/users";
 import {MessageType} from "../types/messages";
+import {RequestWithUserType} from "../types/requests";
 
 const router = Router()
 
-interface MessagesRequestProps extends Request {
-    user: Omit<UserGetType, "password">;
-}
-
 router.get('/', async (req: Request, res: Response) => {
     try {
-        const authUser = (req as MessagesRequestProps).user;
+        const authUser = (req as RequestWithUserType).user;
         const user = {
             id: authUser.id,
             email: authUser.email,
-            created_at: authUser.created_at,
             name: authUser.name
         };
         const ctrl = new MessagesController({user: user});
@@ -30,11 +25,10 @@ router.get('/', async (req: Request, res: Response) => {
 
 router.post('/', async (req: Request, res: Response) => {
     try {
-        const authUser = (req as MessagesRequestProps).user;
+        const authUser = (req as RequestWithUserType).user;
         const user = {
             id: authUser.id,
             email: authUser.email,
-            created_at: authUser.created_at,
             name: authUser.name,
         }
         const {body} = req
@@ -51,11 +45,10 @@ router.put('/:id', async (req: Request, res: Response) => {
     try {
         const {id} = req.params
         const payload = req.body
-        const authUser = (req as MessagesRequestProps).user;
+        const authUser = (req as RequestWithUserType).user;
         const user = {
             id: authUser.id,
             email: authUser.email,
-            created_at: authUser.created_at,
             name: authUser.name,
         }
         const ctrl = new MessagesController({user: user});

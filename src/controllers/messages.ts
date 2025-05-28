@@ -1,12 +1,12 @@
 import {MessageType} from "../types/messages";
 import MessagesModel from "../models/messages";
-import {UserGetType} from "../types/users";
+import {UserRequestType} from "../types/users";
 
 class MessagesController {
     private messagesModel: MessagesModel = new MessagesModel()
-    private user: Pick<UserGetType, "id" | "name" | "email">;
+    private user: UserRequestType;
 
-    constructor(props: { user: Omit<UserGetType, "password"> }) {
+    constructor(props: { user: UserRequestType }) {
         this.user = props.user
 
     }

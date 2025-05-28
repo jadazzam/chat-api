@@ -11,3 +11,9 @@ export interface UserPostType {
     email: string;
     password: string;
 }
+
+export interface UserRequestType {
+    id: string;
+    name: string;
+    email: string;
+}
