@@ -14,10 +14,10 @@ router.post("/signin", async (req: Request, res: Response<{ token: string | unde
             email: req.body.email,
             password: req.body.password
         })
-        return res.status(200).json(response);
+        res.status(200).json(response);
     } catch (e: any) {
         console.error("Error sign in", e)
-        return res.status(401).json({message: e.message})
+        res.status(401).json({message: e.message})
     }
 })
 
@@ -31,10 +31,10 @@ router.post("/signup", async (req: Request, res: Response<{ token: string | unde
             email: req.body.email,
             password: req.body.password
         })
-        return res.status(200).json(response);
+        res.status(200).json(response);
     } catch (e: any) {
         console.error("Error sign in", e)
-        return res.status(401).json({message: e.message})
+        res.status(401).json({message: e.message})
     }
 })
 

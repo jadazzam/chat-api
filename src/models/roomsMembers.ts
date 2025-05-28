@@ -2,11 +2,7 @@ import PoolDB from "../db";
 import {RoomsMembersType} from "../types/roomsMembers";
 
 class RoomsMembersModel {
-    private pool: PoolDB
-
-    constructor() {
-        this.pool = new PoolDB();
-    }
+    private pool: PoolDB = new PoolDB();
 
     async findByParam(param: "user_id" | "room_id", value: unknown) {
         try {

@@ -3,11 +3,7 @@ import {QueryResult} from "pg";
 import {UserGetType, UserPostType} from "../types/users";
 
 class Users {
-    private pool: PoolDB;
-
-    constructor() {
-        this.pool = new PoolDB();
-    }
+    private pool: PoolDB = new PoolDB();
 
     async findAll(): Promise<UserGetType[]> {
         try {

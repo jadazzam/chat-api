@@ -1,16 +1,13 @@
 import express, {Request, Response} from 'express';
 import RoomsMembersController from "../controllers/roomsMembers";
-import {UserGetType} from "../types/users";
+import {RequestWithUserType} from "../types/requests"
 
 const router = express.Router();
 
-interface RoomsMembersRequest extends Request {
-    user: Pick<UserGetType, "id" | "name" | "email">;
-}
 
 router.get('/', async (req: Request, res: Response) => {
     try {
-        const user = (req as RoomsMembersRequest).user
+        const {user} = req as RequestWithUserType
         const sanitized = Object.assign({}, {id: user.id, email: user.email, name: user.name})
         const ctrl = new RoomsMembersController({user: sanitized});
         const response = await ctrl.findByParam()
@@ -21,13 +18,13 @@ router.get('/', async (req: Request, res: Response) => {
     }
 })
 
-interface RoomsMembersPostRequest extends RoomsMembersRequest {
+interface RoomsMembersPostRequestType extends RequestWithUserType {
     params: { roomId: string; userId: string };
 }
 
 router.post('/', async (req: Request, res: Response) => {
     try {
-        const {user} = req as RoomsMembersPostRequest
+        const {user} = req as RoomsMembersPostRequestType
         const {roomId, userId} = req.body
         const sanitized = Object.assign({}, {id: user.id, email: user.email, name: user.name})
         const ctrl = new RoomsMembersController({user: sanitized});
@@ -39,13 +36,13 @@ router.post('/', async (req: Request, res: Response) => {
     }
 })
 
-interface RoomsMembersPutRequest extends RoomsMembersPostRequest {
+interface RoomsMembersPutRequestType extends RequestWithUserType {
     query: { active: string }
 }
 
 router.put('/:roomId/:userId', async (req: Request, res: Response) => {
     try {
-        const {user} = req as RoomsMembersPutRequest
+        const {user} = req as RoomsMembersPutRequestType
         let active = req.query.active as string
         const {roomId, userId} = req.params
         const sanitized = Object.assign({}, {id: user.id, email: user.email, name: user.name})

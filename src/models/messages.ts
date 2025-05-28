@@ -3,11 +3,7 @@ import {MessageType} from "../types/messages";
 import {QueryResult} from "pg";
 
 class MessagesModel {
-    private pool: PoolDB;
-
-    constructor() {
-        this.pool = new PoolDB();
-    }
+    private pool: PoolDB = new PoolDB();
 
     async findByParam(param: string, value: string): Promise<MessageType[]> {
         try {
