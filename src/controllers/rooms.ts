@@ -11,6 +11,13 @@ class RoomsController {
 
     async create(payload: { name: string }) {
         try {
+            const allowedParams: string[] = ["name"];
+            Object.keys(payload).forEach((key) => {
+                if (!allowedParams.includes(key)) throw new Error('key not allowed');
+            })
+            allowedParams.forEach((param: string) => {
+                if (!payload[param as keyof typeof payload]) throw new Error(`key not allowed: ${param}`);
+            })
             if (!payload.name) throw new Error("name is required");
             const room = {
                 name: payload.name,

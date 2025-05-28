@@ -14,7 +14,7 @@ interface RoomsPostRequestType extends RequestWithUserType {
 router.post("/", async (req: Request, res: Response) => {
     try {
         const user: UserRequestType = (req as RoomsPostRequestType).user
-        const name = (req as RoomsPostRequestType).body.name;
+        const {name} = (req as RoomsPostRequestType).body;
         const ctrl = new RoomsController(user)
         const room = await ctrl.create({
             name
