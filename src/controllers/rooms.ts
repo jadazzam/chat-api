@@ -9,6 +9,15 @@ class RoomsController {
         this.user = user
     }
 
+    async findAll() {
+        try {
+            return await this.roomsModel.findAll();
+        } catch (e) {
+            console.error("Error RoomsController findAll", e)
+            throw e
+        }
+    }
+
     async create(payload: { name: string }) {
         try {
             const allowedParams: string[] = ["name"];
