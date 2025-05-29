@@ -35,6 +35,20 @@ router.get("/mine", async (req: Request, res: Response) => {
     }
 })
 
+router.get("/:id", async (req: Request, res: Response) => {
+    try {
+        const user: UserRequestType = (req as RoomsPostRequestType).user
+        const ctrl = new RoomsController(user)
+        const {id} = req.params
+        const {complete} = req.query
+        const room = await ctrl.findByParam("id", id, complete === "true")
+        res.status(200).json(room)
+    } catch (e) {
+        console.error("Error Rooms POST", e)
+        res.status(500).json(null)
+    }
+})
+
 
 router.post("/", async (req: Request, res: Response) => {
     try {
