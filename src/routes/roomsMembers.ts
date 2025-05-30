@@ -31,8 +31,8 @@ router.post('/', async (req: Request, res: Response) => {
         const response = await ctrl.create({roomId, userId})
         return res.status(200).json(response)
     } catch (e) {
-        console.error('Error route POST rooms-members roomId and userId', e)
-        res.status(500).json({error: (e as Error).message})
+        console.error('Error route POST roomsMembers roomId and userId', e)
+        res.status(500).json({message: `'Error route POST roomsMembers roomId and userId' ${e}`})
     }
 })
 
@@ -52,7 +52,7 @@ router.put('/:roomId/:userId', async (req: Request, res: Response) => {
         return res.status(200).json(response)
     } catch (e) {
         console.error('Error route PUT rooms-members roomId and userId', e)
-        res.status(500).json({error: `Error route PUT rooms-members roomId and userId ${e}`})
+        res.status(500).json({message: `Error route PUT rooms-members roomId and userId ${e}`})
     }
 })
 
