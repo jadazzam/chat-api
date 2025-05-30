@@ -27,7 +27,7 @@ class AuthMiddleware {
     }
 
     static decodeToken(token: string | undefined) {
-        return decoded = token && jwt.verify(token, process.env.JWT_SECRET || '');
+        return token && jwt.verify(token, process.env.JWT_SECRET || '');
     }
 
     static async createToken(payload: { email: string; name: string, id: string }): Promise<string> {
