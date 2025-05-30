@@ -16,7 +16,7 @@ class AuthMiddleware {
                 res.status(500).json({message: "Error: Not authorized: No token provided"})
             }
             const token = authHeader?.split(' ')[1]
-            const decoded = token && jwt.verify(token, process.env.JWT_SECRET || '');
+            const decoded = this.decodeToken(token)
             if (decoded) (req as any).user = decoded;
             else res.status(500).json({message: "Error: Not authorized: invalid token provided"})
             next()
@@ -24,6 +24,10 @@ class AuthMiddleware {
             console.error("Error JWT verification failed:", err);
             res.status(403).json({message: 'Invalid token', error: err});
         }
+    }
+
+    static decodeToken(token: string | undefined) {
+        return decoded = token && jwt.verify(token, process.env.JWT_SECRET || '');
     }
 
     static async createToken(payload: { email: string; name: string, id: string }): Promise<string> {

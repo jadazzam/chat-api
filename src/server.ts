@@ -1,8 +1,12 @@
 import 'dotenv/config'
-import app from './app';
+import {initSocket} from "./middlewares/socket";
+import app from "./app";
+
+// init socket & attach user to socket
+const serverWithSocket = initSocket(app)
 
 const PORT = process.env.PORT || 8080;
 
-app.listen(PORT, () => {
+serverWithSocket.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
