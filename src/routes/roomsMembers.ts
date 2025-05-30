@@ -37,21 +37,22 @@ router.post('/', async (req: Request, res: Response) => {
 })
 
 interface RoomsMembersPutRequestType extends RequestWithUserType {
-    query: { active: string }
+    body: { active: boolean }
 }
 
 router.put('/:roomId/:userId', async (req: Request, res: Response) => {
     try {
         const {user} = req as RoomsMembersPutRequestType
-        let active = req.query.active as string
+        const {active} = req.body as Record<"active", boolean>
+        console.log('active', typeof active)
         const {roomId, userId} = req.params
         const sanitized = Object.assign({}, {id: user.id, email: user.email, name: user.name})
         const ctrl = new RoomsMembersController({user: sanitized});
-        const response = await ctrl.update(roomId, userId, {active: active})
+        const response = await ctrl.update(roomId, userId, {active})
         return res.status(200).json(response)
     } catch (e) {
         console.error('Error route PUT rooms-members roomId and userId', e)
-        res.status(500).json({error: (e as Error).message})
+        res.status(500).json({error: `Error route PUT rooms-members roomId and userId ${e}`})
     }
 })
 

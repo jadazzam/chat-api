@@ -34,7 +34,7 @@ class RoomsMembersController {
     }
 
     async update(room_id: string, user_id: string, changes: {
-        active: string
+        active: boolean
     }): Promise<RoomsMembersType> {
         try {
             if (!room_id) throw new Error("room_id must be provided");
@@ -45,10 +45,10 @@ class RoomsMembersController {
                 if (!allowedChanges.includes(key)) throw new Error(`update ${key} param is not allowed`);
             })
             let {active} = changes
-            if (active !== "false") throw new Error(`active value ${active} not supported`)
+            if (active !== false) throw new Error(`active value ${active} not supported`)
             // user can only quit room. If he joins ago, it will be a new row in rooms_members.
             // rooms_members row can only be deactivated. Activation not possible.
-            return await this.roomsMembersModel.update(room_id, user_id, {active: false})
+            return await this.roomsMembersModel.update(room_id, user_id, {active})
         } catch (e) {
             console.error("Error RoomsMembers Controller update", e)
             throw e
