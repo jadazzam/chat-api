@@ -27,6 +27,7 @@ class AuthMiddleware {
     }
 
     static decodeToken(token: string | undefined) {
+        if (token?.startsWith('Bearer ')) token = token.split("Bearer ").pop()
         return token && jwt.verify(token, process.env.JWT_SECRET || '');
     }
 
