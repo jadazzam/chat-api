@@ -22,24 +22,6 @@ router.get('/', async (req: Request, res: Response) => {
     }
 });
 
-router.get('/rooms/:roomId', async (req: Request, res: Response) => {
-    try {
-        const authUser = (req as RequestWithUserType).user;
-        const user = {
-            id: authUser.id,
-            email: authUser.email,
-            name: authUser.name
-        };
-        const {roomId} = req.params
-        const ctrl = new MessagesController({user: user});
-        const messages: MessageType[] = await ctrl.findByParam("room_id", roomId);
-        return res.status(200).json(messages);
-    } catch (e) {
-        console.error("Error Route GET messages by room id", e);
-        res.status(500).json({message: (e as Error).message});
-    }
-});
-
 router.post('/', async (req: Request, res: Response) => {
     try {
         const authUser = (req as RequestWithUserType).user;
