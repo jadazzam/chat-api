@@ -51,7 +51,7 @@ class SocketServer {
                 console.log(`${socket.id} joined room ${roomId}`);
             });
 
-            socket.on("send message", ({roomId, content}) => {
+            socket.on("send message", ({roomId, content}, callback) => {
                 console.log(`Message sent to room ${roomId}:`, content);
                 // // this excludes sender :
                 // socket.to(roomId).emit(...)  // ❌ excludes sender
@@ -61,6 +61,9 @@ class SocketServer {
                     content,
                     senderId: socket.id, // optional, for client-side filtering
                 });
+                if (typeof callback === 'function') {
+                    callback({status: 'ok', senderId: socket.id});
+                }
             });
         });
     }
