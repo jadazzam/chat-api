@@ -17,7 +17,7 @@ router.post("/signin", async (req: Request, res: Response<{ token: string | unde
         res.status(200).json(response);
     } catch (e: any) {
         console.error("Error sign in", e)
-        res.status(401).json({message: e.message})
+        res.status(401).json(e)
     }
 })
 
