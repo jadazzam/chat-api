@@ -35,7 +35,7 @@ router.get('/rooms/:roomId', async (req: Request, res: Response) => {
         const messages: MessageType[] = await ctrl.findByParam("room_id", roomId);
         return res.status(200).json(messages);
     } catch (e) {
-        console.error("Error Route GET messages", e);
+        console.error("Error Route GET messages by room id", e);
         res.status(500).json({message: (e as Error).message});
     }
 });
@@ -72,7 +72,7 @@ router.put('/:id', async (req: Request, res: Response) => {
         const message: MessageType = await ctrl.update(id, payload);
         res.status(200).json(message);
     } catch (e) {
-        console.error("Error Route POST message", e);
+        console.error("Error Route PUT message by id", e);
         res.status(500).json({message: (e as Error).message});
     }
 })

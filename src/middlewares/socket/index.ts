@@ -39,9 +39,8 @@ class SocketServer {
     }
 
     joinRoom() {
-        console.log("does he ever come here again?")
         this.io.on("connection", (socket) => {
-            console.log("User connected", socket.id);
+            console.log("User connected with socket", socket.id);
 
             // Let the client join a room
             socket.on("join room", (roomId) => {
@@ -59,7 +58,8 @@ class SocketServer {
                 // Broadcast message to everyone else in the room
                 this.io.to(roomId).emit("receive message", {
                     content,
-                    senderId: socket.id, // optional, for client-side filtering
+                    senderId: socket.id,
+                    userId: socket.data.user.id
                 });
                 if (typeof callback === 'function') {
                     callback({status: 'ok', senderId: socket.id});
