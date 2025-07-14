@@ -12,7 +12,7 @@ class AuthMiddleware {
         const authHeader = req.headers.authorization;
         try {
             if (!this.checkJwtSecret()) res.status(500).json({message: "Error JWT token"})
-            if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            if (!authHeader || !authHeader?.startsWith('Bearer ')) {
                 res.status(500).json({message: "Error: Not authorized: No token provided"})
             }
             const token = authHeader?.split(' ')[1]
