@@ -45,7 +45,6 @@ class SocketServer {
             // Let the client join a room
             socket.on("join room", (roomId) => {
                 socket.join(roomId);
-                console.log("joiined room???? => yes id :", roomId)
                 socket.emit('joined room', roomId); // notify client
                 console.log(`${socket.id} joined room ${roomId}`);
             });
