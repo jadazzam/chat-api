@@ -10,7 +10,7 @@ class RoomsMembersController {
         this.user = props.user;
     }
 
-    async findByParam(param: "user_id" | "room_id" = "user_id", value: unknown = this.user.id): Promise<RoomsMembersType[]> {
+    async findByParam(param: "user_id" | "room_id" = "user_id", value: string = this.user.id): Promise<RoomsMembersType[]> {
         try {
             const allowedParams = ["user_id", "room_id"]
             if (!allowedParams.includes(param)) throw new Error(`findByParam ${param} not allowed`);
@@ -23,9 +23,12 @@ class RoomsMembersController {
 
     async create(params: { roomId: string; userId: string }): Promise<RoomsMembersType> {
         try {
-            const {roomId, userId} = params;
+            const {roomId, userId} = params
             if (!roomId) throw new Error(`roomId param is required`);
             if (!userId) throw new Error(`userId param is required`);
+            const rooms: RoomsMembersType[] = await this.roomsMembersModel.findByParams({roomId, userId})
+            const isAlreadyMember: RoomsMembersType | undefined = rooms.find(_r => _r.left_at === null)
+            if (isAlreadyMember) return isAlreadyMember
             return await this.roomsMembersModel.create({roomId, userId});
         } catch (e) {
             console.error("Error RoomsMembers Controller create", e)

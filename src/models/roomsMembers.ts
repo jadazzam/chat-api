@@ -30,7 +30,6 @@ class RoomsMembersModel {
                 values.push(roomId);
                 conditions.push(`room_id = $${values.length}`);
             }
-            console.log("conditions ???", conditions)
             if (conditions.length) {
                 query += ' WHERE ' + conditions.join(' AND ');
             }
