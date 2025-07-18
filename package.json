@@ -33,10 +33,17 @@
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
+    "cookie": "^1.0.2",
+    "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
-    "pg": "^8.15.6"
+    "pg": "^8.15.6",
+    "socket.io": "^4.8.1"
   },
-  "type": "module"
+  "type": "module",
+  "optionalDependencies": {
+    "bufferutil": "^4.0.9",
+    "utf-8-validate": "^6.0.5"
+  }
 }

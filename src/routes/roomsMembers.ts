@@ -44,7 +44,6 @@ router.put('/:roomId/:userId', async (req: Request, res: Response) => {
     try {
         const {user} = req as RoomsMembersPutRequestType
         const {active} = req.body as Record<"active", boolean>
-        console.log('active', typeof active)
         const {roomId, userId} = req.params
         const sanitized = Object.assign({}, {id: user.id, email: user.email, name: user.name})
         const ctrl = new RoomsMembersController({user: sanitized});

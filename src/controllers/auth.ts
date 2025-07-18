@@ -17,7 +17,7 @@ class AuthController {
                 if (!payload.password) field += ' password'
                 throw new Error(`No user sign in info provided. Missing fields : ${field}`)
             }
-            const {email, password} = payload
+            const {email} = payload
             const user: UserGetType | null = await this.usersCtrl.findByParam("email", email, true)
             if (!user) throw new Error("User not found")
             // must await, otherwise exception error not detected

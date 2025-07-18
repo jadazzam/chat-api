@@ -22,7 +22,6 @@ router.get('/', async (req: Request, res: Response) => {
     }
 });
 
-
 router.post('/', async (req: Request, res: Response) => {
     try {
         const authUser = (req as RequestWithUserType).user;
@@ -55,7 +54,7 @@ router.put('/:id', async (req: Request, res: Response) => {
         const message: MessageType = await ctrl.update(id, payload);
         res.status(200).json(message);
     } catch (e) {
-        console.error("Error Route POST message", e);
+        console.error("Error Route PUT message by id", e);
         res.status(500).json({message: (e as Error).message});
     }
 })
