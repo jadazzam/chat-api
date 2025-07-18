@@ -1,5 +1,8 @@
 import {NextFunction, Request, Response} from "express";
 import jwt from "jsonwebtoken";
+import cookie from 'cookie';
+
+const JWT_SECRET = process.env.JWT_SECRET
 
 class AuthMiddleware {
 
@@ -9,17 +12,15 @@ class AuthMiddleware {
 
 
     static verifyToken(req: Request, res: Response, next: NextFunction): void {
-        const authHeader = req.headers.authorization;
         try {
-            if (!this.checkJwtSecret()) res.status(500).json({message: "Error JWT token"})
-            if (!authHeader || !authHeader?.startsWith('Bearer ')) {
-                res.status(500).json({message: "Error: Not authorized: No token provided"})
+            if (!JWT_SECRET) res.status(500).json({message: "Error JWT token"})
+            const cookies = cookie.parse(req.headers.cookie || '');
+            const token = cookies.auth_token;
+            if (!token) {
+                res.status(401).json({message: 'Not authorized: No token provided'});
             }
-            const token = authHeader?.split(' ')[1]
-            const decoded = this.decodeToken(token)
-            if (decoded) (req as any).user = decoded;
-            else res.status(500).json({message: "Error: Not authorized: invalid token provided"})
-            next()
+            (req as any).user = jwt.verify(token || '', JWT_SECRET || '');
+            next();
         } catch (err) {
             console.error("Error JWT verification failed:", err);
             res.status(403).json({message: 'Invalid token', error: err});
