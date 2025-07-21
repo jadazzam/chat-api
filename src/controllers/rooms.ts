@@ -1,8 +1,9 @@
-import {UserRequestType} from "../types/users";
+import {UserGetType, UserRequestType} from "../types/users";
 import RoomsModel from "../models/rooms";
 import {RoomsType} from "../types/rooms";
 import MessagesController from "./messages";
 import {MessageType} from "../types/messages";
+import UsersController from "./users";
 
 class RoomsController {
     private roomsModel = new RoomsModel()
@@ -33,7 +34,19 @@ class RoomsController {
             let res = Object.assign({}, {data: response})
             if (complete) {
                 const MessagesCtrler = new MessagesController({user: this.user})
-                const messages: MessageType[] = await MessagesCtrler.findByParam('room_id', value)
+                let messages: MessageType[] = await MessagesCtrler.findByParam('room_id', value)
+                let usersIds: string[] = []
+                for (const message of messages) {
+                    if (usersIds.some(_u => _u === message.user_id)) continue
+                    else usersIds.push(message.user_id)
+                }
+                if (usersIds.length) {
+                    const UsersCtrler = new UsersController()
+                    const users: UserGetType[] = await UsersCtrler.findByIds(usersIds)
+                    messages = messages.map(_message => {
+                        return Object.assign({}, _message, {user: users.find((_u: UserGetType) => _u.id === _message.user_id)})
+                    })
+                }
                 res = Object.assign({}, res, {messages})
             }
             return res

@@ -25,6 +25,17 @@ class Users {
         }
     }
 
+
+    async findByIds(ids: string[]): Promise<UserGetType[]> {
+        try {
+            const res: QueryResult = await this.pool.query('SELECT id, name, email, created_at FROM users WHERE id = ANY($1)', [ids])
+            return res.rows as UserGetType[];
+        } catch (e) {
+            console.error("Error in Users Model findById:", e);
+            throw e;
+        }
+    }
+
     async findByParam(param: string, value: unknown, complete: boolean): Promise<UserGetType> {
         const allowedParams = ['name', 'email']; // Define allowed columns only
         if (!allowedParams.includes(param)) {
